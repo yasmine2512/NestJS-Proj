@@ -3,10 +3,15 @@ import { UsersService } from './users.service';
 import { createUserDto } from './Dto/createUser.dto';
 import { updateUserDto } from './Dto/updateUser.dto';
 import { ValidationPipe } from '@nestjs/common';
+import { Throttle,SkipThrottle } from '@nestjs/throttler';
+import { skip } from 'node:test';
+import { throttle } from 'rxjs';
+@SkipThrottle()     //skip rate limiting
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService){}
 
+    @SkipThrottle({default:false})   //apply rate limiting for this
     @Get()  // GET /users
     getallusers(@Query('role') role?: 'intern' | 'admin'){
         return this.usersService.getallusers(role)
@@ -17,7 +22,7 @@ export class UsersController {
         return this.usersService.getallinterns()
     }
 
-
+    @Throttle({short:{ttl:1000, limit:1}})
     @Get(':id') //GET /users/:id
     getuser(@Param('id',ParseIntPipe) id: number){  //parseIntpipe turn to nuber
         return this.usersService.getuser(id)  //+ turn it to number

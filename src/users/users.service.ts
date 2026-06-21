@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { createUserDto } from './Dto/createUser.dto';
 import { updateUserDto } from './Dto/updateUser.dto';
-import { NotFoundError } from 'rxjs';
+
 @Injectable()
 export class UsersService {
-
+// constructor(private readonly DBService: DBService){} //db service
 private users = [
 {id: 1,
 name: "user1",
